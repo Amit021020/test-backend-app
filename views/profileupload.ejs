@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="h-screen">
+    <div class="w-full h-full bg-zinc-900 p-10 text-white" flex >
+        <h1 class="text-3xl tracking-tighter mb-5">Upload Profile Pic</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file"  name="image" class=" px-5 py-2 outline-none rounded-lg border-2 border-zinc-800 bg-transparant ">
+            
+            <input type="submit" value="Upload" class=" px-5 py-2 rounded-md  bg-blue-500 ml-3 ">
+            
+        </form>
+    </div>
+</body>
+</html>

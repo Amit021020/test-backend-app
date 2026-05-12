@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const postModel = require('./models/post')
 const cookieParser = require('cookie-parser')
+const upload = require('./config/multerconfig.js')
 app.set("view engine","ejs")
 app.use(express.json())
 app.use(cookieParser())
@@ -17,7 +18,15 @@ app.get("/",(req, res)=>{
 app.get("/login",(req, res)=>{
     res.render("login")
 })
-
+app.get("/profile/upload",(req,res)=>{
+    res.render("profileupload")
+})
+app.post("/upload",isLoggedIn,upload.single("image"),async (req,res)=>{
+    let user = await userModel.findOne({email: req.user.email})
+    user.profilepic = req.file.filename
+    await user.save()
+    res.redirect("/profile")
+})
 app.post("/login", async (req, res)=>{
     let {email,password} = req.body
     let user = await userModel.findOne({email})
@@ -76,7 +85,9 @@ app.get("/logout",(req,res)=>{
 app.post("/register", async (req, res)=>{
     let {name,username,email,age,password} = req.body
     let user = await userModel.findOne({email})
-    if(user) return res.status(500).send("User already resgitered")
+    if(user){
+      return res.status(500).send("User already resgitered")  
+    } 
     bcrypt.genSalt(10,(err,salt)=> {
         bcrypt.hash(password,salt,async (err,hash)=>{
             let createdUser = await userModel.create({
@@ -91,7 +102,7 @@ app.post("/register", async (req, res)=>{
 
         })
     })  
-    res.redirect("/")
+    res.redirect("/login")
 })
 function isLoggedIn(req,res,next) {
     if(req.cookies.token === "") res.redirect("/login")
